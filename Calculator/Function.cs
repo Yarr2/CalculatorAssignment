@@ -4,7 +4,14 @@ public class Function
 {
     private int _numberOfArguments;
     private string _name;
+    public string _implementation;
 
+    public Function(string name,string implementation, int numberOfArguments)
+    {
+        _name = name;
+        _implementation = implementation;
+        _numberOfArguments = numberOfArguments;
+    }
     public double Calculate(double[] arguments)
     {
         if (arguments.Length != _numberOfArguments)
@@ -15,3 +22,5 @@ public class Function
         return arguments[0];
     }
 }
+
+// f(x,y,xy) = x^2 + 2xy 
