@@ -57,9 +57,9 @@ public class OwnStack<T>
 
     public void ShowStack()
     {
-        foreach (T value in _array)
+        for (int i = 0; i < _pointer; i ++)
         {
-            Console.WriteLine(value);
+            Console.WriteLine(_array[i]);
         }
     }
 }
