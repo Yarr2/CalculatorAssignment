@@ -4,7 +4,9 @@ public class Function
 {
     private int _numberOfArguments;
     private string _name;
-    public string _implementation;
+    private string _implementation;
+
+    public string Implementation => _implementation;
 
     public Function(string name,string implementation, int numberOfArguments)
     {
