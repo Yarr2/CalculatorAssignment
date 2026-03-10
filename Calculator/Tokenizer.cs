@@ -7,27 +7,55 @@ public class Tokenizer
         
         OwnQueue<string> queue = new OwnQueue<string>(text.Length);
         List<string> operationSymbols = operations.Select(operation => operation.Symbol).ToList();
+        int index = 0;
         string number = "";
-        foreach (char symbol in text)
+        string textToken = "";
+        while (index <= text.Length)
         {
-            if (symbol == ' ') continue;
-            if (symbol <= '9' && symbol >= '0')
+            char symbol = text[index];
+
+            if (symbol == ' ' ||
+                symbol == ',')
             {
-                number += symbol;
+                index++;
                 continue;
             }
-            if ( operationSymbols.Contains(symbol.ToString()))
+            if (operationSymbols.Contains(char.ToString(symbol)))
             {
-                if (number != "") queue.Add(number);
-                queue.Add(symbol.ToString());
+                queue.Add(char.ToString(symbol));
+                index++;
+            }
+
+            while ('0' <= text[index] && text[index] <= '9')
+            {
+                number += text[index];
+                index++;
+            }
+
+            if (number != "")
+            {
+                queue.Add(number);
                 number = "";
-                continue;
             }
 
-            throw new Exception("Our calculator does not support your symbols");
-        }
+            while ('a' <= char.ToLower(text[index]) && char.ToLower(text[index]) <= 'z')
+            {
+                textToken += text[index];
+                index++;
+            }
 
-        if (number != "") queue.Add(number);
+            if (textToken != "")
+            {
+                queue.Add(textToken);
+                textToken = "";
+            }
+
+            Console.WriteLine("Start of an attempt ----------");
+            queue.ShowQueue();
+            Console.WriteLine(index);
+            Console.WriteLine($"text.Length - {text.Length}");
+            Console.WriteLine("End of an attempt ----------");
+        }
         return queue;
     }
 }

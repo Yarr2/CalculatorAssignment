@@ -24,7 +24,7 @@ public class OwnQueue<T>
 
     public void Add(T value)
     {
-        if (_endingPoint < _capacity)
+        if (_endingPoint <= _capacity)
         {
             _array[_endingPoint] = value;
             _endingPoint++;
