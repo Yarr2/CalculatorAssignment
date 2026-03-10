@@ -15,6 +15,8 @@ class Program
         
         Tokenizer tokenizer = new Tokenizer();
         string text = Console.ReadLine();
-        Tokenizer.Tokenize(text,binOperations).ShowQueue();
+        var queue = Tokenizer.Tokenize(text, binOperations);
+        Console.WriteLine(Checker.Check(queue,binOperations));
+        queue.ShowQueue();
     }
 }
