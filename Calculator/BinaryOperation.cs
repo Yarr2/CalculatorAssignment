@@ -1,13 +1,17 @@
 ﻿namespace Calculator;
 
+public enum Associativity
+{
+    Left,Right
+}
 public class BinaryOperation
 {
     public readonly string Symbol;
     public readonly int Preference;
-    public readonly string Assosiativity;
+    public readonly Associativity Assosiativity;
     public readonly Func<double[], double> _calculate;
 
-    public BinaryOperation(string symbol, int preference, string assosiativity, Func<double[],double> calculate)
+    public BinaryOperation(string symbol, int preference, Associativity assosiativity, Func<double[],double> calculate)
     {
         Symbol = symbol;
         Preference = preference;

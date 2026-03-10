@@ -4,14 +4,19 @@ class Program
 {
     static void Main(string[] args)
     {
-        OwnList<string> smth = new OwnList<string>();
-        smth.Append("Yarema");
-        smth.Append("Anna");
-        smth.Append("Ignat");
-        smth.Append("Rostik");
-        smth.Append("Lina");
-        smth.Insert("Marat",3);
-        smth.Remove("Marat");
-        smth.ShowList();
+        List<BinaryOperation> binOperations = new List<BinaryOperation>()
+        {
+            new BinaryOperation("+", 0, Associativity.Right, args => args[0] + args[1]),
+            new BinaryOperation("-", 0, Associativity.Right, args => args[0] + args[1]),
+            new BinaryOperation("*", 0, Associativity.Right, args => args[0] + args[1]),
+            new BinaryOperation("/", 0, Associativity.Right, args => args[0] + args[1]),
+            new BinaryOperation("^", 0, Associativity.Right, args => args[0] + args[1]),
+            new BinaryOperation("(", 0, Associativity.Right, args => args[0] + args[1]),
+            new BinaryOperation(")", 0, Associativity.Right, args => args[0] + args[1]),
+            };
+        
+        Tokenizer tokenizer = new Tokenizer();
+        string text = Console.ReadLine();
+        Tokenizer.Tokenize(text,binOperations).ShowQueue();
     }
 }
