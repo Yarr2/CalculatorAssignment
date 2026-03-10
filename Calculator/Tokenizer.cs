@@ -2,15 +2,15 @@
 
 public class Tokenizer
 {
-    public static OwnQueue<string> Tokenize(string text, List<BinaryOperation> operations)
+    public static OwnQueue<string> Tokenize(string text, OwnList<BinaryOperation> operations)
     {
-        
+        text += " ";
         OwnQueue<string> queue = new OwnQueue<string>(text.Length);
-        List<string> operationSymbols = operations.Select(operation => operation.Symbol).ToList();
+        OwnList<string> operationSymbols = operations.GetSpecificArguments(operation => operation.Symbol);
         int index = 0;
         string number = "";
         string textToken = "";
-        while (index <= text.Length)
+        while (index < text.Length)
         {
             char symbol = text[index];
 
@@ -24,6 +24,7 @@ public class Tokenizer
             {
                 queue.Add(char.ToString(symbol));
                 index++;
+                continue;
             }
 
             while ('0' <= text[index] && text[index] <= '9')
@@ -49,12 +50,6 @@ public class Tokenizer
                 queue.Add(textToken);
                 textToken = "";
             }
-
-            Console.WriteLine("Start of an attempt ----------");
-            queue.ShowQueue();
-            Console.WriteLine(index);
-            Console.WriteLine($"text.Length - {text.Length}");
-            Console.WriteLine("End of an attempt ----------");
         }
         return queue;
     }

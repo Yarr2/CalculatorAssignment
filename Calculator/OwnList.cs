@@ -65,6 +65,27 @@ public class OwnList<T>
             }
         }
     }
+
+    public bool Contains(T element)
+    {
+        for (int index = 0; index < _pointer; index++)
+        {
+            if (EqualityComparer<T>.Default.Equals(_array[index], element)) return true;
+        }
+        return false;
+    }
+    public OwnList<string> GetSpecificArguments(Func<T, string> transform)
+    {
+        OwnList<string> result = new OwnList<string>();
+        for (int index = 0; index < _pointer; index++)
+        {
+            result.Append(transform(_array[index]));
+        }
+
+        return result;
+    }
+
+    
     public void ShowList()
     {
         for (int index = 0; index < _pointer; index++)
