@@ -74,5 +74,16 @@ public class OwnQueue<T>
             Console.WriteLine(_array[i]);
         }
     }
+
+    public T[] ToArray()
+    {
+        T[] array = new T[Size];
+        for (int index = _startingPoint; index < _endingPoint; index ++)
+        {
+            array[index - _startingPoint] = _array[index];
+        }
+
+        return array;
+    }
     
 }

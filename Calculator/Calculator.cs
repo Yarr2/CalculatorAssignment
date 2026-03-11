@@ -3,6 +3,7 @@
 public class Calculator
 {
     private OwnList<BinaryOperation> _operations;
+    private OwnList<Function> _functions;
 
     public Calculator(OwnList<BinaryOperation> operations)
     {

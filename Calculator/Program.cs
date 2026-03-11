@@ -1,4 +1,6 @@
-﻿namespace Calculator;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Calculator;
 
 class Program
 {
@@ -12,7 +14,11 @@ class Program
         binOperations.Append(new BinaryOperation("^", 4, Associativity.Right, args => Math.Pow(args[1],args[0])));
         binOperations.Append(new BinaryOperation("(", 0, Associativity.Left, args => args[1] + args[0]));
         binOperations.Append(new BinaryOperation(")", 0, Associativity.Left, args => args[1] + args[0]));
-
+        binOperations.Append(new BinaryOperation("max", 9, Associativity.Left, args => Math.Max(args[1],args[0])));
+        binOperations.Append(new BinaryOperation("=",0,Associativity.Left,args => args[0]));
+        Function function = new Function("f","f(x,y) = x^2 + y - 5",2);
+        Console.WriteLine(function.GetCalculatableForm(new double[]{3,2},binOperations));
+        
         Calculator calculator = new Calculator(binOperations);
         string text = Console.ReadLine();
         var queue = Tokenizer.Tokenize(text, binOperations);
