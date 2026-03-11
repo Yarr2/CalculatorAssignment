@@ -74,6 +74,7 @@ public class OwnList<T>
         }
         return false;
     }
+
     public T GetElement(Func<T, string> transformation, string output)
     {
         for (int index = 0; index < _pointer; index++)
