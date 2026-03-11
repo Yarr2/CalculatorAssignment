@@ -35,7 +35,7 @@ public class OwnStack<T>
     {
         if (_pointer == 0)
         {
-            throw new Exception("Stack is empty");
+            return default(T);
         }
 
         _pointer--;
@@ -57,10 +57,19 @@ public class OwnStack<T>
 
     public void ShowStack()
     {
-        foreach (T value in _array)
+        for (int i = 0; i < _pointer; i ++)
         {
-            Console.WriteLine(value);
+            Console.WriteLine(_array[i]);
         }
+    }
+
+    public T Peek()
+    {
+        if (_pointer == 0)
+        {
+            return default(T);
+        }
+        return _array[_pointer - 1];
     }
 }
     

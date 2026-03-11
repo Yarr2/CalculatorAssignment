@@ -4,16 +4,22 @@ class Program
 {
     static void Main(string[] args)
     {
-        var stack = new OwnQueue<string>(5);
-        stack.Add("loh1");
-        stack.Add("loh2");
-        stack.Add("loh3");
-        stack.Add("loh4");
-        stack.Add("loh5");
-        stack.ShowQueue();
-        stack.Pop();
-        Console.WriteLine(stack.Pop());
-        stack.ShowQueue();
+        OwnList<BinaryOperation> binOperations = new OwnList<BinaryOperation>();
+        binOperations.Append(new BinaryOperation("+", 2, Associativity.Left, args => args[1] + args[0]));
+        binOperations.Append(new BinaryOperation("-", 2, Associativity.Left, args => args[1] - args[0]));
+        binOperations.Append(new BinaryOperation("*", 3, Associativity.Left, args => args[1] * args[0]));
+        binOperations.Append(new BinaryOperation("/", 3, Associativity.Left, args => args[1] / args[0]));
+        binOperations.Append(new BinaryOperation("^", 4, Associativity.Right, args => Math.Pow(args[1],args[0])));
+        binOperations.Append(new BinaryOperation("(", 0, Associativity.Left, args => args[1] + args[0]));
+        binOperations.Append(new BinaryOperation(")", 0, Associativity.Left, args => args[1] + args[0]));
 
+        Calculator calculator = new Calculator(binOperations);
+        string text = Console.ReadLine();
+        var queue = Tokenizer.Tokenize(text, binOperations);
+        var postfix = ToPostFixConvertor.ToPostFixConvert(queue, binOperations);
+        Console.WriteLine("smth");
+        postfix.ShowQueue();
+        Console.WriteLine("smth");
+        calculator.CalculatePostFix(postfix);
     }
 }
