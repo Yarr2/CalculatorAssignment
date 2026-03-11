@@ -6,10 +6,10 @@ class Program
     {
         OwnList<BinaryOperation> binOperations = new OwnList<BinaryOperation>();
         binOperations.Append(new BinaryOperation("+", 0, Associativity.Right, args => args[0] + args[1]));
-        binOperations.Append(new BinaryOperation("-", 0, Associativity.Right, args => args[0] + args[1]));
-        binOperations.Append(new BinaryOperation("*", 0, Associativity.Right, args => args[0] + args[1]));
-        binOperations.Append(new BinaryOperation("/", 0, Associativity.Right, args => args[0] + args[1]));
-        binOperations.Append(new BinaryOperation("^", 0, Associativity.Right, args => args[0] + args[1]));
+        binOperations.Append(new BinaryOperation("-", 0, Associativity.Right, args => args[0] - args[1]));
+        binOperations.Append(new BinaryOperation("*", 0, Associativity.Right, args => args[0] * args[1]));
+        binOperations.Append(new BinaryOperation("/", 0, Associativity.Right, args => args[0] / args[1]));
+        binOperations.Append(new BinaryOperation("^", 0, Associativity.Right, args => Math.Pow(args[0],args[1])));
         binOperations.Append(new BinaryOperation("(", 0, Associativity.Right, args => args[0] + args[1]));
         binOperations.Append(new BinaryOperation(")", 0, Associativity.Right, args => args[0] + args[1]));
         

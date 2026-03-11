@@ -15,8 +15,14 @@ public class Calculator
                 stack.Push(result);
                 continue;
             }
-            _operations.
-            
+
+            BinaryOperation operation = _operations.GetElement(operation => operation.Symbol, value);
+            stack.Push(operation._calculate(new double[] { stack.Pull(), stack.Pull() }));
+
         }
+
+        double var = stack.Pull();
+        Console.WriteLine(var);
+        return var;
     }
 }
