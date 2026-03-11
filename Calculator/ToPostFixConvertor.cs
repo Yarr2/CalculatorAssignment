@@ -34,8 +34,6 @@ public class ToPostFixConvertor
                 postfix.Add(operation.Symbol);
             }
             operations.Push(avaliableOperations.GetElement(operation => operation.Symbol,value));
-            Console.WriteLine("-----------------------");
-            operations.ShowStack();
             
         }
         while (!operations.IsEmpty())

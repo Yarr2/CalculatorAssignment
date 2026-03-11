@@ -5,16 +5,21 @@ class Program
     static void Main(string[] args)
     {
         OwnList<BinaryOperation> binOperations = new OwnList<BinaryOperation>();
-        binOperations.Append(new BinaryOperation("+", 2, Associativity.Left, args => args[0] + args[1]));
-        binOperations.Append(new BinaryOperation("-", 2, Associativity.Left, args => args[0] + args[1]));
-        binOperations.Append(new BinaryOperation("*", 3, Associativity.Left, args => args[0] + args[1]));
-        binOperations.Append(new BinaryOperation("/", 3, Associativity.Left, args => args[0] + args[1]));
-        binOperations.Append(new BinaryOperation("^", 4, Associativity.Right, args => args[0] + args[1]));
-        binOperations.Append(new BinaryOperation("(", 0, Associativity.Left, args => args[0] + args[1]));
-        binOperations.Append(new BinaryOperation(")", 0, Associativity.Left, args => args[0] + args[1]));
-        
+        binOperations.Append(new BinaryOperation("+", 2, Associativity.Left, args => args[1] + args[0]));
+        binOperations.Append(new BinaryOperation("-", 2, Associativity.Left, args => args[1] - args[0]));
+        binOperations.Append(new BinaryOperation("*", 3, Associativity.Left, args => args[1] * args[0]));
+        binOperations.Append(new BinaryOperation("/", 3, Associativity.Left, args => args[1] / args[0]));
+        binOperations.Append(new BinaryOperation("^", 4, Associativity.Right, args => Math.Pow(args[1],args[0])));
+        binOperations.Append(new BinaryOperation("(", 0, Associativity.Left, args => args[1] + args[0]));
+        binOperations.Append(new BinaryOperation(")", 0, Associativity.Left, args => args[1] + args[0]));
+
+        Calculator calculator = new Calculator(binOperations);
         string text = Console.ReadLine();
         var queue = Tokenizer.Tokenize(text, binOperations);
-        ToPostFixConvertor.ToPostFixConvert(queue, binOperations).ShowQueue();
+        var postfix = ToPostFixConvertor.ToPostFixConvert(queue, binOperations);
+        Console.WriteLine("smth");
+        postfix.ShowQueue();
+        Console.WriteLine("smth");
+        calculator.CalculatePostFix(postfix);
     }
 }
