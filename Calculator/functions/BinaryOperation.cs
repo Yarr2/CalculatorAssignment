@@ -1,9 +1,4 @@
 ﻿namespace Calculator;
-
-public enum Associativity
-{
-    Left,Right
-}
 public class BinaryOperation
 {
     public readonly string Symbol;

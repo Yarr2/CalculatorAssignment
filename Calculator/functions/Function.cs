@@ -1,31 +1,34 @@
 ﻿namespace Calculator;
 
-public class Function
+public enum Associativity
 {
-    private int _numberOfArguments;
-    private string _name;
-    private string _implementation;
-
-    public string Implementation => _implementation;
+    Left,Right
+}
+public class Function(
+    string name,
+    int numberOfArguments,
+    int preference,
+    Associativity associativity,
+    Func<double[], double> function = null)
+{
+    private Func<double[],double> _calculate = function;
+    public readonly int Preference = preference;
+    public readonly Associativity Assosiativity = associativity;
+    public readonly int NumberOfArguments = numberOfArguments;
+    
     public string Symbol()
     {
-        return _name;
+        return name;
     }
 
-
-    public Function(string name,string implementation, int numberOfArguments)
+    public double Calculate(double[] arguments)
     {
-        _name = name;
-        _implementation = implementation;
-        _numberOfArguments = numberOfArguments;
+        return _calculate(arguments);
     }
-    public string GetCalculatableForm(double[] arguments,OwnList<BinaryOperation> operations)
+
+    public static string GetCalculatableForm(string implementation , double[] arguments)
     {
-        if (arguments.Length != _numberOfArguments)
-        {
-            throw new Exception($"This function takes {_numberOfArguments} instead of {arguments.Length} given");
-        }
-        string[] tokens = Tokenizer.Tokenize(_implementation, operations).ToArray();
+        string[] tokens = Tokenizer.Tokenize(implementation).ToArray();
         int index = 2;
         string result = "";
         while (tokens[index] != ")")
@@ -49,10 +52,6 @@ public class Function
         return result;
     }
 
-    public double Calculate(double[] arguments, OwnList<Function> functions)
-    {
-        return 0;
-    }
 }
 
 // f(x,y,xy) = x^2 + 2xy 
