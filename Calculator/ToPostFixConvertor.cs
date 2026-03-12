@@ -3,12 +3,13 @@
 public class ToPostFixConvertor
 {
     // Queue tokens => Queue sorted tokens
-    public static OwnQueue<string> ToPostFixConvert(OwnQueue<string> tokens, OwnList<BinaryOperation> avaliableOperations)
+    public static OwnQueue<string> ToPostFixConvert(OwnQueue<string> tokens,
+        OwnList<BinaryOperation> avaliableOperations)
     {
         OwnQueue<string> postfix = new OwnQueue<string>(tokens.Size);
         OwnStack<BinaryOperation> operations = new OwnStack<BinaryOperation>(tokens.Size);
         int size = tokens.Size;
-        for (int index = 0; index < size; index ++)
+        for (int index = 0; index < size; index++)
         {
             string value = tokens.Pop();
             if (Double.TryParse(value, out double result))
@@ -25,17 +26,23 @@ public class ToPostFixConvertor
                     postfix.Add(value);
                     value = operations.Pull().Symbol;
                 }
+
                 if (value != "(") postfix.Add(value);
                 continue;
             }
-            while (value != "(" && BinaryOperation.Comparator(avaliableOperations.GetElement(operation => operation.Symbol, value), operations.Peek()))
+
+            while (value != "(" &&
+                   BinaryOperation.Comparator(avaliableOperations.GetElement(operation => operation.Symbol, value),
+                       operations.Peek()))
             {
                 BinaryOperation operation = operations.Pull();
                 postfix.Add(operation.Symbol);
             }
-            operations.Push(avaliableOperations.GetElement(operation => operation.Symbol,value));
-            
+
+            operations.Push(avaliableOperations.GetElement(operation => operation.Symbol, value));
+
         }
+
         while (!operations.IsEmpty())
         {
             BinaryOperation value = operations.Pull();
@@ -45,3 +52,4 @@ public class ToPostFixConvertor
         return postfix;
     }
 }
+    

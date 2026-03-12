@@ -86,6 +86,8 @@ public class OwnList<T>
         }
 
         return default(T);
+
+        return default(T);
     }
     public OwnList<string> GetSpecificArguments(Func<T, string> transform)
     {

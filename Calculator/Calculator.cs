@@ -14,10 +14,7 @@ public class Calculator
         OwnStack<double> stack = new OwnStack<double>(postFix.Size);
         while (postFix.Size != 0)
         {
-            Console.WriteLine("---------------");
-            stack.ShowStack();
             string value = postFix.Pop();
-            Console.WriteLine($"Next token - {value}");
             if (double.TryParse(value, out double result))
             {
                 stack.Push(result);

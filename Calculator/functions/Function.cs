@@ -7,6 +7,11 @@ public class Function
     private string _implementation;
 
     public string Implementation => _implementation;
+    public string Symbol()
+    {
+        return _name;
+    }
+
 
     public Function(string name,string implementation, int numberOfArguments)
     {
@@ -40,10 +45,13 @@ public class Function
         {
             result += tokens[secondaryIndex];
         }
-    
-
 
         return result;
+    }
+
+    public double Calculate(double[] arguments, OwnList<Function> functions)
+    {
+        return 0;
     }
 }
 

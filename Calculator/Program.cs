@@ -4,7 +4,7 @@ namespace Calculator;
 
 class Program
 {
-    static void Main(string[] args)
+    static void Main(string[] args) // "12 3 +"
     {
         OwnList<BinaryOperation> binOperations = new OwnList<BinaryOperation>();
         binOperations.Append(new BinaryOperation("+", 2, Associativity.Left, args => args[1] + args[0]));
@@ -16,6 +16,7 @@ class Program
         binOperations.Append(new BinaryOperation(")", 0, Associativity.Left, args => args[1] + args[0]));
         binOperations.Append(new BinaryOperation("max", 9, Associativity.Left, args => Math.Max(args[1],args[0])));
         binOperations.Append(new BinaryOperation("=",0,Associativity.Left,args => args[0]));
+        binOperations.Append(new BinaryOperation("abs",0,Associativity.Left,args => Math.Abs(args[0])));
         Function function = new Function("f","f(x,y) = x^2 + y - 5",2);
         Console.WriteLine(function.GetCalculatableForm(new double[]{3,2},binOperations));
         
@@ -29,3 +30,6 @@ class Program
         calculator.CalculatePostFix(postfix);
     }
 }
+
+// queue - [smth smth func ( 1 2 4 ) smth smth smth] -> 
+// queue - [smth smth 1 + 2 + 4 smth smth smth]
