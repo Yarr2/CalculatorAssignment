@@ -4,10 +4,10 @@ public class ToPostFixConvertor
 {
     // Queue tokens => Queue sorted tokens
     public static OwnQueue<string> ToPostFixConvert(OwnQueue<string> tokens,
-        OwnList<BinaryOperation> avaliableOperations)
+        OwnList<Function> avaliableFunctions)
     {
         OwnQueue<string> postfix = new OwnQueue<string>(tokens.Size);
-        OwnStack<BinaryOperation> operations = new OwnStack<BinaryOperation>(tokens.Size);
+        OwnStack<Function> functions = new OwnStack<Function>(tokens.Size);
         int size = tokens.Size;
         for (int index = 0; index < size; index++)
         {
@@ -20,11 +20,11 @@ public class ToPostFixConvertor
 
             if (value == ")")
             {
-                value = operations.Pull().Symbol;
-                while (value != "(" && operations.StackSize >= 1)
+                value = functions.Pull().Symbol;
+                while (value != "(" && functions.StackSize >= 1)
                 {
                     postfix.Add(value);
-                    value = operations.Pull().Symbol;
+                    value = functions.Pull().Symbol;
                 }
 
                 if (value != "(") postfix.Add(value);
@@ -32,23 +32,23 @@ public class ToPostFixConvertor
             }
 
             while (value != "(" &&
-                   BinaryOperation.Comparator(avaliableOperations.GetElement(operation => operation.Symbol, value),
-                       operations.Peek()))
+                   Function.Comparator(avaliableFunctions.GetElement(function => function.Symbol, value),
+                       functions.Peek()))
             {
-                BinaryOperation operation = operations.Pull();
-                postfix.Add(operation.Symbol);
+                Function function = functions.Pull();
+                postfix.Add(function.Symbol);
             }
 
-            operations.Push(avaliableOperations.GetElement(operation => operation.Symbol, value));
+            functions.Push(avaliableFunctions.GetElement(operation => operation.Symbol, value));
 
         }
 
-        while (!operations.IsEmpty())
+        while (!functions.IsEmpty())
         {
-            BinaryOperation value = operations.Pull();
+            Function value = functions.Pull();
             postfix.Add(value.Symbol);
         }
-
+   
         return postfix;
     }
 }

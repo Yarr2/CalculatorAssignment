@@ -1,13 +1,34 @@
-﻿namespace Calculator;
+﻿using System.Linq.Expressions;
+
+namespace Calculator;
 
 public class Calculator
 {
-    private OwnList<BinaryOperation> _operations;
     private OwnList<Function> _functions;
-
-    public Calculator(OwnList<BinaryOperation> operations)
+    
+    public Calculator(OwnList<Function> functions)
     {
-        _operations = operations;
+        _functions = functions;
+    }
+
+    public void AddFunction(Function function)
+    {
+        _functions.Append(function);
+    }
+
+    public double CalculateFunction(string expression, double[] arguments)
+    {
+        var calculableForm = Function.GetCalculatableForm(expression, arguments);
+        var tokens = Tokenizer.Tokenize(calculableForm);
+        var postfix = ToPostFixConvertor.ToPostFixConvert(tokens, _functions);
+        return CalculatePostFix(postfix);
+    }
+
+    public double Calculate(string expression)
+    {
+        var tokens = Tokenizer.Tokenize(expression);
+        var postfix = ToPostFixConvertor.ToPostFixConvert(tokens, _functions);
+        return CalculatePostFix(postfix);
     }
     public double CalculatePostFix(OwnQueue<string> postFix)
     {
@@ -21,13 +42,17 @@ public class Calculator
                 continue;
             }
 
-            BinaryOperation operation = _operations.GetElement(operation => operation.Symbol, value);
-            stack.Push(operation._calculate(new double[] { stack.Pull(), stack.Pull() }));
+            Function function = _functions.GetElement(function => function.Symbol, value);
+            double[] arguments = new double[function.NumberOfArguments];
+            for (int index = 0; index < function.NumberOfArguments; index++)
+            {
+                arguments[index] = stack.Pull();
+            }
+            stack.Push(function.Calculate(arguments));
             
         }
 
         double var = stack.Pull();
-        Console.WriteLine(var);
         return var;
     }
 }
