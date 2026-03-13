@@ -15,10 +15,11 @@ public class Function(
     public readonly int Preference = preference;
     public readonly Associativity Assosiativity = associativity;
     public readonly int NumberOfArguments = numberOfArguments;
+    private string name = name;  
     
-    public string Symbol()
+    public string Symbol
     {
-        return name;
+        get => name;
     }
 
     public double Calculate(double[] arguments)
@@ -44,12 +45,19 @@ public class Function(
             index++;
         }
 
-        for (int secondaryIndex = tokens.IndexOf("="); secondaryIndex < tokens.Length; secondaryIndex++)
+        for (int secondaryIndex = tokens.IndexOf("=") + 1; secondaryIndex < tokens.Length; secondaryIndex++)
         {
             result += tokens[secondaryIndex];
         }
 
         return result;
+    }
+    public static bool Comparator(Function left, Function right)
+    {
+        if (right == default(Function)) return false;
+        return (left.Preference < right.Preference ||
+                (left.Preference == right.Preference &&
+                 left.Assosiativity == Associativity.Left));
     }
 
 }

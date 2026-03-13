@@ -30,6 +30,7 @@ public class Tokenizer
             {
                 queue.Add(number);
                 number = "";
+                continue;
             }
 
             while ('a' <= char.ToLower(text[index]) && char.ToLower(text[index]) <= 'z')
@@ -42,6 +43,7 @@ public class Tokenizer
             {
                 queue.Add(textToken);
                 textToken = "";
+                continue;
             }
             queue.Add(char.ToString(symbol));
             index++;
