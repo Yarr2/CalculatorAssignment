@@ -74,6 +74,21 @@ public class OwnList<T>
         }
         return false;
     }
+
+    public T GetElement(Func<T, string> transformation, string output)
+    {
+        for (int index = 0; index < _pointer; index++)
+        {
+            if (transformation(_array[index]) == output)
+            {
+                return _array[index];
+            }
+        }
+
+        return default(T);
+
+        return default(T);
+    }
     public OwnList<string> GetSpecificArguments(Func<T, string> transform)
     {
         OwnList<string> result = new OwnList<string>();

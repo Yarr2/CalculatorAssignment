@@ -1,9 +1,4 @@
 ﻿namespace Calculator;
-
-public enum Associativity
-{
-    Left,Right
-}
 public class BinaryOperation
 {
     public readonly string Symbol;
@@ -21,5 +16,13 @@ public class BinaryOperation
     public override string ToString()
     {
         return $"Operation '{Symbol}' with preference value {Preference},associativity - {Assosiativity}";
+    }
+
+    public static bool Comparator(BinaryOperation left, BinaryOperation right)
+    {
+        if (right == default(BinaryOperation)) return false;
+        return (left.Preference < right.Preference ||
+                (left.Preference == right.Preference &&
+                 left.Assosiativity == Associativity.Left));
     }
 }

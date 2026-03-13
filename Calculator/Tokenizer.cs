@@ -2,11 +2,10 @@
 
 public class Tokenizer
 {
-    public static OwnQueue<string> Tokenize(string text, OwnList<BinaryOperation> operations)
+    public static OwnQueue<string> Tokenize(string text)
     {
         text += " ";
         OwnQueue<string> queue = new OwnQueue<string>(text.Length);
-        OwnList<string> operationSymbols = operations.GetSpecificArguments(operation => operation.Symbol);
         int index = 0;
         string number = "";
         string textToken = "";
@@ -17,12 +16,6 @@ public class Tokenizer
             if (symbol == ' ' ||
                 symbol == ',')
             {
-                index++;
-                continue;
-            }
-            if (operationSymbols.Contains(char.ToString(symbol)))
-            {
-                queue.Add(char.ToString(symbol));
                 index++;
                 continue;
             }
@@ -37,6 +30,7 @@ public class Tokenizer
             {
                 queue.Add(number);
                 number = "";
+                continue;
             }
 
             while ('a' <= char.ToLower(text[index]) && char.ToLower(text[index]) <= 'z')
@@ -49,7 +43,11 @@ public class Tokenizer
             {
                 queue.Add(textToken);
                 textToken = "";
+                continue;
             }
+            queue.Add(char.ToString(symbol));
+            index++;
+
         }
         return queue;
     }
