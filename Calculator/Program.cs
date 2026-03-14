@@ -29,7 +29,14 @@ class Program
             Console.Write(">");
             string input = Console.ReadLine();
             if (input == "quit") break;
-            Console.WriteLine(calculator.Calculate(input));
+            if (calculator.CheckFunction(input))
+            {
+                continue;
+            }
+            
+            if (calculator.CheckExpression(input)) Console.WriteLine(calculator.Calculate(input));
+
+            
             
         }
     }

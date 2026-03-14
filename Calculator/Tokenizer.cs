@@ -2,8 +2,12 @@
 
 public class Tokenizer
 {
-    public static OwnQueue<string> Tokenize(string text)
+    public static OwnQueue<string> Tokenize(string text,char[] skippableSymbols = null)
     {
+        if (skippableSymbols == null)
+        {
+            skippableSymbols = new char[2] { ' ', ',' };
+        }
         text += " ";
         OwnQueue<string> queue = new OwnQueue<string>(text.Length);
         int index = 0;
@@ -13,8 +17,7 @@ public class Tokenizer
         {
             char symbol = text[index];
 
-            if (symbol == ' ' ||
-                symbol == ',')
+            if (skippableSymbols.Contains(symbol))
             {
                 index++;
                 continue;

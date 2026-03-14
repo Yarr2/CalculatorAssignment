@@ -30,9 +30,11 @@ public class Function(
     public static string GetCalculatableForm(string implementation , double[] arguments)
     {
         string[] tokens = Tokenizer.Tokenize(implementation).ToArray();
+        bool IsVariable = false;
+        if (tokens[1] == "=") IsVariable = true;
         int index = 2;
         string result = "";
-        while (tokens[index] != ")")
+        while (tokens[index] != ")" && !IsVariable)
         {
             for (int secondaryIndex = tokens.IndexOf("="); secondaryIndex < tokens.Length; secondaryIndex++)
             {

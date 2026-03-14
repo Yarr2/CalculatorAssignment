@@ -16,6 +16,18 @@ public class Calculator
         _functions.Append(function);
     }
 
+    public bool CheckExpression(string expression)
+    {
+        if (expression.Contains("=")) return false;
+        return Checker.Check(Tokenizer.Tokenize(expression), _functions);
+    }
+    public bool CheckFunction(string expression)
+    {
+        bool check = Checker.CheckForFunctionDefinition(expression, _functions, out Function temporaryFunction);
+        if (check) AddFunction(temporaryFunction);
+        return check;
+    }
+
     public double CalculateFunction(string expression, double[] arguments)
     {
         var calculableForm = Function.GetCalculatableForm(expression, arguments);
@@ -29,6 +41,11 @@ public class Calculator
         var tokens = Tokenizer.Tokenize(expression);
         var postfix = ToPostFixConvertor.ToPostFixConvert(tokens, _functions);
         return CalculatePostFix(postfix);
+    }
+
+    public void ShowFunctions()
+    {
+        _functions.ShowList();
     }
     public double CalculatePostFix(OwnQueue<string> postFix)
     {
