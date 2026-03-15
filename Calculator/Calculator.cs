@@ -19,10 +19,14 @@ public class Calculator
     public bool CheckExpression(string expression)
     {
         if (expression.Contains("=")) return false;
-        return Checker.Check(Tokenizer.Tokenize(expression), _functions);
+        return Checker.Check(expression, _functions);
     }
     public bool CheckFunction(string expression)
     {
+        if (!expression.Contains("="))
+        {
+            return false;
+        }
         bool check = Checker.CheckForFunctionDefinition(expression, _functions, out Function temporaryFunction);
         if (check) AddFunction(temporaryFunction);
         return check;
@@ -31,18 +35,27 @@ public class Calculator
     public double CalculateFunction(string expression, double[] arguments)
     {
         var calculableForm = Function.GetCalculatableForm(expression, arguments);
-        var tokens = Tokenizer.Tokenize(calculableForm);
-        var postfix = ToPostFixConvertor.ToPostFixConvert(tokens, _functions);
-        return CalculatePostFix(postfix);
+        return Calculate(calculableForm);
     }
 
     public double Calculate(string expression)
     {
+        if (!CheckExpression(expression))
+        {
+            Console.WriteLine("You are invalid");
+            return 0;
+        }
         var tokens = Tokenizer.Tokenize(expression);
+        // Console.WriteLine("Start tokens");tokens.ShowQueue();Console.WriteLine("End tokens");
         var postfix = ToPostFixConvertor.ToPostFixConvert(tokens, _functions);
+        // Console.WriteLine("Start postfix");postfix.ShowQueue();Console.WriteLine("End postfix");
         return CalculatePostFix(postfix);
     }
 
+    public void CheckFunctionNew(string expression)
+    {
+        Console.WriteLine(Checker.CheckFunctionValidity(expression, 3, _functions));
+    }
     public void ShowFunctions()
     {
         _functions.ShowList();
@@ -50,6 +63,8 @@ public class Calculator
     public double CalculatePostFix(OwnQueue<string> postFix)
     {
         OwnStack<double> stack = new OwnStack<double>(postFix.Size);
+        // Console.WriteLine("Start Postfix");postFix.ShowQueue();Console.WriteLine("End postfix");
+
         while (postFix.Size != 0)
         {
             string value = postFix.Pop();
@@ -63,13 +78,20 @@ public class Calculator
             double[] arguments = new double[function.NumberOfArguments];
             for (int index = 0; index < function.NumberOfArguments; index++)
             {
-                arguments[index] = stack.Pull();
+                arguments[function.NumberOfArguments - index - 1] = stack.Pull();
+                // Console.WriteLine($" index of 1 - {function.NumberOfArguments - index - 1}");
             }
+            // Console.WriteLine($"arg 0 - {arguments[0]}");
             stack.Push(function.Calculate(arguments));
             
         }
 
         double var = stack.Pull();
+        if (stack.StackSize != 0)
+        {
+            Console.WriteLine("Invalid Expression");
+            throw new Exception("Something");
+        }
         return var;
     }
 }
