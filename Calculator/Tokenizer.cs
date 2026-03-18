@@ -2,7 +2,7 @@
 
 public class Tokenizer
 {
-    public static OwnQueue<string> Tokenize(string text,char[] skippableSymbols = null)
+    public static OwnQueue<string> Tokenize(string text,char[]? skippableSymbols = null)
     {
         if (skippableSymbols == null)
         {
@@ -23,14 +23,18 @@ public class Tokenizer
                 continue;
             }
 
-            while ('0' <= text[index] && text[index] <= '9')
+            while (('0' <= text[index] && text[index] <= '9') || text[index] == '.')
             {
+                if (number.Contains('.') && text[index] == '.') break;
+                
                 number += text[index];
                 index++;
             }
 
             if (number != "")
             {
+                if (number[number.Length - 1] == '.') number.Replace(".", "");
+                number.Replace(".", ",");
                 queue.Add(number);
                 number = "";
                 continue;

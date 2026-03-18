@@ -12,7 +12,7 @@ public class ToPostFixConvertor
         for (int index = 0; index < size; index++)
         {
             string value = tokens.Pop();
-            if (Double.TryParse(value, out double result))
+            if (Double.TryParse(value.Replace(".", ","), out double result))
             {
                 postfix.Add(value);
                 continue;

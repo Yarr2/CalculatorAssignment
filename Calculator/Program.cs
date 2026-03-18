@@ -45,11 +45,15 @@ class Program
 
                 if (calculator.CheckExpression(input)) Console.WriteLine(calculator.Calculate(input));
             }
-            catch (Exception exception)
+            finally
             {
-                if ((exception.Message) == "Something") continue;
-                throw exception;
+                int smrg = 0;
             }
+            // catch (Exception exception)
+            // {
+            //     if ((exception.Message) == "Something") continue;
+            //     
+            // }
 
         }
     }

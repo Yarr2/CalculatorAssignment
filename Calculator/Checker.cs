@@ -111,8 +111,7 @@ public class Checker
         {
             string value = tokens.Pop();
             index++;
-            if (Double.TryParse(value,out var result)) continue;
-
+            if (Double.TryParse(value.Replace(".",","),out var result)) continue;
             if (value == ",") continue;// will be fixed
             if (value == ")")
             {

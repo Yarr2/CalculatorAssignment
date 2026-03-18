@@ -68,7 +68,7 @@ public class Calculator
         while (postFix.Size != 0)
         {
             string value = postFix.Pop();
-            if (double.TryParse(value, out double result))
+            if (double.TryParse(value.Replace(".",","), out double result))
             {
                 stack.Push(result);
                 continue;
@@ -89,6 +89,7 @@ public class Calculator
         double var = stack.Pull();
         if (stack.StackSize != 0)
         {
+            stack.ShowStack();
             Console.WriteLine("Invalid Expression");
             throw new Exception("Something");
         }
