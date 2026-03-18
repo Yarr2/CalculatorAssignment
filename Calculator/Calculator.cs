@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Calculator.AST;
 
 namespace Calculator;
 
@@ -38,6 +39,24 @@ public class Calculator
         return Calculate(calculableForm);
     }
 
+    public double CalculateWithAST(string expression)
+    {
+        if (!CheckExpression(expression))
+        {
+            Console.WriteLine("You are invalid");
+            return 0;
+        }
+        var tokens = Tokenizer.Tokenize(expression);
+        // Console.WriteLine("Start tokens");tokens.ShowQueue();Console.WriteLine("End tokens");
+        var postfix = ToPostFixConvertor.ToPostFixConvert(tokens, _functions);
+        
+        var tokensAST = Tokenizer.Tokenize(expression);
+        var postfixAST = ToPostFixConvertor.ToPostFixConvert(tokensAST, _functions);
+
+        // Console.WriteLine("Start postfix");postfix.ShowQueue();Console.WriteLine("End postfix");
+        ASTBuilder.BuildAST(postfixAST,_functions);
+        return CalculatePostFix(postfix);
+    }
     public double Calculate(string expression)
     {
         if (!CheckExpression(expression))

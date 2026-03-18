@@ -43,7 +43,7 @@ class Program
                     continue;
                 }
 
-                if (calculator.CheckExpression(input)) Console.WriteLine(calculator.Calculate(input));
+                if (calculator.CheckExpression(input)) Console.WriteLine(calculator.CalculateWithAST(input));
             }
             finally
             {

@@ -6,6 +6,16 @@ public class OwnList<T>
     private int _capacity = 1;
     private int _pointer = 0;
 
+    public int Size
+    {
+        get => _pointer;
+    }
+
+    public T GetElement(int index)
+    {
+        if (index >= _pointer) throw new Exception("Index out of range");
+        return _array[index];
+    }
     public void Append(T element)
     {
         if (_pointer == _capacity)

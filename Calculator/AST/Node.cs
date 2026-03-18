@@ -10,9 +10,16 @@ public class Node
     {
         Name = name;
     }
-    
+
+    public OwnList<Node> Arguments => _arguments;
+
     public void AddArgument(Node node)
     {
         _arguments.Append(node);
+    }
+
+    public override string ToString()
+    {
+        return $"name - {Name}, arguments count - {_arguments.Size},layer - {Layer}";
     }
 }

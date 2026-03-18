@@ -4,12 +4,15 @@ public class Tokenizer
 {
     public static OwnQueue<string> Tokenize(string text,char[]? skippableSymbols = null)
     {
+        bool IsSkippableSymbolsDefined = true;
         if (skippableSymbols == null)
         {
-            skippableSymbols = new char[2] { ' ', ',' };
+            
+            skippableSymbols = new char[1] { ' ' };
+            IsSkippableSymbolsDefined = false;
         }
         text += " ";
-        OwnQueue<string> queue = new OwnQueue<string>(text.Length);
+        OwnQueue<string> queue = new OwnQueue<string>(3 * text.Length);
         int index = 0;
         string number = "";
         string textToken = "";
@@ -50,6 +53,25 @@ public class Tokenizer
             {
                 queue.Add(textToken);
                 textToken = "";
+                continue;
+            }
+
+            if (symbol == ')')
+            {
+                queue.Add(")");
+            }
+
+            if (symbol == '(')
+            {
+                queue.Add("(");
+            }
+
+            if (symbol == ',')
+            {
+                queue.Add(")");
+                if (IsSkippableSymbolsDefined) queue.Add(",");
+                queue.Add("(");
+                index++;
                 continue;
             }
             queue.Add(char.ToString(symbol));
