@@ -2,19 +2,22 @@
 
 public class ASTShow
 {
-    public static void Visualise(Node node, string indent = "", bool isLast = true)
+    public static void Visualise(Node node, string indent = "", bool last = true)
     {
-        string marker = isLast ? "└── " : "├── ";
+        string marker;
+        if (last) marker = "└── ";
+        else marker = "├── ";
         
         Console.Write(indent);
         Console.Write(marker);
         Console.WriteLine(node.Name);
 
-        indent += isLast ? "    " : "│   ";
+        if (last) indent += "    ";
+        else indent += "│   ";
 
-        for (int i = 0; i < node.Arguments.Size; i++)
+        for (int index = 0; index < node.Arguments.Size; index++)
         {
-            Visualise(node.Arguments.GetElement(i), indent, i == node.Arguments.Size - 1);
+            Visualise(node.Arguments.GetElement(index), indent, index == node.Arguments.Size - 1);
         }
     }
 
