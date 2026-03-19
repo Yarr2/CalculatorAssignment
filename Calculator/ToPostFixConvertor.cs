@@ -12,7 +12,7 @@ public class ToPostFixConvertor
         for (int index = 0; index < size; index++)
         {
             string value = tokens.Pop();
-            if (Double.TryParse(value, out double result))
+            if (Double.TryParse(value.Replace(".", ","), out double result))
             {
                 postfix.Add(value);
                 continue;
@@ -39,7 +39,8 @@ public class ToPostFixConvertor
                 postfix.Add(function.Symbol);
             }
 
-            functions.Push(avaliableFunctions.GetElement(operation => operation.Symbol, value));
+            Function nextFunction = avaliableFunctions.GetElement(operation => operation.Symbol, value);
+            if (nextFunction != null)functions.Push(nextFunction);
 
         }
 
@@ -48,7 +49,6 @@ public class ToPostFixConvertor
             Function value = functions.Pull();
             postfix.Add(value.Symbol);
         }
-   
         return postfix;
     }
 }

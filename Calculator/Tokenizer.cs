@@ -2,10 +2,25 @@
 
 public class Tokenizer
 {
-    public static OwnQueue<string> Tokenize(string text)
+    public static string AddBracketsForFunctions(string text)
     {
+        text = text.Replace("(", "((");
+        text = text.Replace(")", "))");
+        text = text.Replace(",", "),(");
+        return text;
+    }
+    public static OwnQueue<string> Tokenize(string text,char[]? skippableSymbols = null)
+    {
+        
+        bool IsSkippableSymbolsDefined = true;
+        if (skippableSymbols == null)
+        {
+            
+            skippableSymbols = new char[1] { ' ' };
+            IsSkippableSymbolsDefined = false;
+        }
         text += " ";
-        OwnQueue<string> queue = new OwnQueue<string>(text.Length);
+        OwnQueue<string> queue = new OwnQueue<string>(3 * text.Length);
         int index = 0;
         string number = "";
         string textToken = "";
@@ -13,21 +28,24 @@ public class Tokenizer
         {
             char symbol = text[index];
 
-            if (symbol == ' ' ||
-                symbol == ',')
+            if (skippableSymbols.Contains(symbol))
             {
                 index++;
                 continue;
             }
 
-            while ('0' <= text[index] && text[index] <= '9')
+            while (('0' <= text[index] && text[index] <= '9') || text[index] == '.')
             {
+                if (number.Contains('.') && text[index] == '.') break;
+                
                 number += text[index];
                 index++;
             }
 
             if (number != "")
             {
+                if (number[number.Length - 1] == '.') number.Replace(".", "");
+                number.Replace(".", ",");
                 queue.Add(number);
                 number = "";
                 continue;
@@ -45,7 +63,13 @@ public class Tokenizer
                 textToken = "";
                 continue;
             }
-            queue.Add(char.ToString(symbol));
+
+
+            if ((IsSkippableSymbolsDefined && text[index] == ',') || text[index] != ',')
+            {
+                queue.Add(char.ToString(symbol));
+            }
+
             index++;
 
         }
