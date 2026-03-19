@@ -13,15 +13,14 @@ public class Checker
         OwnList<string> symbols = functions.GetSpecificArguments(tempFunction => tempFunction.Symbol);
         OwnQueue<string> tokens = Tokenizer.Tokenize(expression,skippableSymbols:new char[1]{' '});
         string name;
-        int numberOfArhuments = 0;
-        
-        
+        int numberOfArguments = 0;
         
         string functionExpression = "";
         for (int index = expression.IndexOf("=") + 1; index < expression.Length; index++)
         {
             functionExpression += expression[index];
         }
+        
         
         name = tokens.Pop();
         if (!name.All(char.IsLetter)) {Console.WriteLine("Invalid name for function");return false;}
@@ -47,59 +46,67 @@ public class Checker
 
         if (value != "(")
         {
-            Console.WriteLine($"After name does not come '(' but comes {value}");
+            Console.WriteLine($"After name does not come '(' but comes '{value}'");
             return false;
         }
         // at this point tokens should look like - '( xzdf ) , ( sfsdsy ) , ( sfsfdsdz ) ) = x ^ 2 + y + z'
         Console.WriteLine("Start Tokens");tokens.ShowQueue();Console.WriteLine("End tokens");
-        while (value != ")")
+        while (value != "=")
         {
-            if (tokens.Pop() != "(") return false;
-            if (!value.All(char.IsLetter))
-            {
-                Console.WriteLine($"Argument = {value}");
-                Console.WriteLine("Function argument is incorrect(not letters)");
-                return false;}
+            // in loop, we aim to check expression of type ( text )
+            if (tokens.Pop() != "(") { return false; }
 
-            numberOfArhuments++;
-            
+            if (!tokens.Pop().All(char.IsLetter)) return false;
+
             if (tokens.Pop() != ")") return false;
+
             value = tokens.Pop();
-            if (value == ",")
-            {
-                value = tokens.Pop();
-                continue;
-            };
-            if (value == ")") break;
-            Console.WriteLine("Wrong formatting");
-            return false;
+            numberOfArguments++;
+            if (value == ")" && (tokens.Pop() == "=")) break;
+            if (value != ",") return false;
+            
         }
-        function = new Function(name,numberOfArhuments,9,Associativity.Right,args => calculator.CalculateFunction(expression,args),TypeOfFunction.Function );
+        function = new Function(name,numberOfArguments,9,Associativity.Right,args => calculator.CalculateFunction(expression,args),TypeOfFunction.Function );
         return true; 
 
     }
-
+    
     public static bool CheckFunctionValidity(string expression, int numberOfArguments, OwnList<Function> functions)
     {
         OwnQueue<string> tokens = Tokenizer.Tokenize(expression,skippableSymbols:new char[1]{' '});
-        // expected input f ( x , ( 1 + 2 ) * 54,23 ) => correct , x => correct (x has 0 arguments)
+        // expected input f ( ( x ) , ( 1 + 2 + max(1,2)) * 54,23 ) => correct , x => correct (x has 0 arguments)
         // f ( x ( 1 + 2 ) * 54 23 ) => ( x ( 1 + 2 ) * 54 23 )
-        tokens.ShowQueue();
         int realNumberOfArguments = 0;
         tokens.Pop();
-        if (tokens.Pop() != "(") return false;
+        if (tokens.Pop() != "(") {Console.WriteLine("Invalid start");return false;}
+        
         while (tokens.Size != 1)
         {
             string value = tokens.Pop();
             string argument = "";
-            while (value != "," && tokens.Size != 1)
+            int brackets;
+            if (value == "(")
             {
+                brackets = 1;
+            }
+            else
+            {
+                Console.WriteLine("incorrect start of an argument");
+                return false;
+            }
+
+            argument += value;
+            value = tokens.Pop();
+            while (brackets != 0 && tokens.Size != 1)
+            {
+                if (value == "(") brackets++;
+                if (value == ")") brackets--;
                 argument += value;
                 value = tokens.Pop();
             }
 
             if (value != ",")argument += value;
-            if (!Check(argument, functions)) return false;
+            if (!Check(argument, functions)) {Console.WriteLine($"Wrong argument - {argument}");return false;}
             realNumberOfArguments++;
         }
 
@@ -112,6 +119,7 @@ public class Checker
     {
         // expression in form of f(x,y) ^ (2 + g(t))
         OwnQueue<string> tokens = Tokenizer.Tokenize(expression, skippableSymbols:new char[1]{' '});
+        // Console.WriteLine("Start tokens Check");tokens.ShowQueue();Console.WriteLine("End tokens Check");
         OwnList<string> functionSymbols = functions.GetSpecificArguments(operation => operation.Symbol);
         int bracketsCounter = 0;
         int size = tokens.Size;
@@ -121,7 +129,10 @@ public class Checker
             string value = tokens.Pop();
             index++;
             if (Double.TryParse(value.Replace(".",","),out var result)) continue;
-            if (value == ",") continue;// will be fixed
+            if (value == ",")
+            {
+                continue;
+            }// will be fixed
             if (value == ")")
             {
                 bracketsCounter--;
@@ -160,6 +171,7 @@ public class Checker
             bracketsCounter++;
             while (bracketsCounter != currentbracketsCounter)
             {
+                int smth = tokens.Size;
                 string element = tokens.Pop();
                 index++;
                 functionExpression += element;
@@ -169,6 +181,7 @@ public class Checker
 
             if (!CheckFunctionValidity(functionExpression, function.NumberOfArguments, functions))
             {
+                Console.WriteLine(functionExpression);
                 Console.WriteLine("Incorrect function usage");
                 return false;
             }
@@ -184,3 +197,7 @@ public class Checker
         return true;
     }
 }
+
+
+
+// problem with this expression f(g(1),f(2,3)) 

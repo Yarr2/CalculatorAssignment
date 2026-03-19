@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+
 namespace Calculator;
 
 class Program
@@ -20,16 +21,18 @@ class Program
         calculator.AddFunction(new Function("abs",1,0,Associativity.Left,args => Math.Abs(args[0]),TypeOfFunction.Function));
         calculator.AddFunction(new Function("A",0,4,Associativity.Left,args => 10,TypeOfFunction.Operation));
         calculator.AddFunction(new Function("Maxim", 3 ,4,Associativity.Left,args => args[0] + args[1] * args[2] - 10,TypeOfFunction.Function));
-        calculator.AddFunction(new Function("f", 2, 4, Associativity.Left, args => calculator.CalculateFunction("f(x,y) = x^2 + max(x,y)",args),TypeOfFunction.Function));
-        calculator.AddFunction(new Function("g", 1      , 4, Associativity.Left, args => calculator.CalculateFunction("g(x) = f(x,x)",args),TypeOfFunction.Function));
+        calculator.AddFunction(new Function("f", 2, 4, Associativity.Left, args => calculator.CalculateFunction("f((x),(y)) = x^2 + max((x),(y))",args),TypeOfFunction.Function));
+        calculator.AddFunction(new Function("g", 1 ,4, Associativity.Left, args => calculator.CalculateFunction("g((x)) = f((x),(x))",args),TypeOfFunction.Function));
 
         bool running = true;
         bool ASTCheck = false;
         while (running)
         {
-            Console.WriteLine("If you want to exit write 'quit'");
+            if (!ASTCheck)Console.WriteLine("If you want to exit write 'quit'");
             Console.Write(">");
             string input = Console.ReadLine();
+            
+            input = Tokenizer.AddBracketsForFunctions(input);
             if (input == "quit") break;
             if (input == "functions")
             { 
@@ -51,7 +54,7 @@ class Program
             {
                 if (ASTCheck) 
                 {
-                    Console.WriteLine(calculator.CalculateWithAST(input));
+                    calculator.CalculateWithAST(input);
                     ASTCheck = false;
                 }
                 else Console.WriteLine(calculator.Calculate(input));

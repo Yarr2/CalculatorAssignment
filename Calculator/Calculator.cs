@@ -24,7 +24,7 @@ public class Calculator
     }
     public bool CheckFunction(string expression)
     {
-        if (!expression.Contains("="))
+        if (!expression.Contains('='))
         {
             return false;
         }
@@ -40,12 +40,12 @@ public class Calculator
         return Calculate(calculableForm);
     }
 
-    public double CalculateWithAST(string expression)
+    public void CalculateWithAST(string expression)
     {
         if (!CheckExpression(expression))
         {
             Console.WriteLine("You are invalid");
-            return 0;
+            return;
         }
         var tokens = Tokenizer.Tokenize(expression);
         // Console.WriteLine("Start tokens");tokens.ShowQueue();Console.WriteLine("End tokens");
@@ -55,8 +55,8 @@ public class Calculator
         var postfixAST = ToPostFixConvertor.ToPostFixConvert(tokensAST, _functions);
 
         // Console.WriteLine("Start postfix");postfix.ShowQueue();Console.WriteLine("End postfix");
-        ASTBuilder.BuildAST(postfixAST,_functions);
-        return CalculatePostFix(postfix);
+        Console.WriteLine(CalculatePostFix(postfix));
+        ASTBuilder.BuildAST(postfixAST, _functions);
     }
     public double Calculate(string expression)
     {
@@ -109,7 +109,7 @@ public class Calculator
         double var = stack.Pull();
         if (stack.StackSize != 0)
         {
-            stack.ShowStack();
+            // stack.ShowStack();
             Console.WriteLine("Invalid Expression");
             throw new Exception("Something");
         }

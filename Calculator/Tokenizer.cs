@@ -2,8 +2,16 @@
 
 public class Tokenizer
 {
+    public static string AddBracketsForFunctions(string text)
+    {
+        text = text.Replace("(", "((");
+        text = text.Replace(")", "))");
+        text = text.Replace(",", "),(");
+        return text;
+    }
     public static OwnQueue<string> Tokenize(string text,char[]? skippableSymbols = null)
     {
+        
         bool IsSkippableSymbolsDefined = true;
         if (skippableSymbols == null)
         {
@@ -56,25 +64,12 @@ public class Tokenizer
                 continue;
             }
 
-            if (symbol == ')')
+
+            if ((IsSkippableSymbolsDefined && text[index] == ',') || text[index] != ',')
             {
-                queue.Add(")");
+                queue.Add(char.ToString(symbol));
             }
 
-            if (symbol == '(')
-            {
-                queue.Add("(");
-            }
-
-            if (symbol == ',')
-            {
-                queue.Add(")");
-                if (IsSkippableSymbolsDefined) queue.Add(",");
-                queue.Add("(");
-                index++;
-                continue;
-            }
-            queue.Add(char.ToString(symbol));
             index++;
 
         }

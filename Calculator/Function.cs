@@ -38,20 +38,22 @@ public class Function(
         string[] tokens = Tokenizer.Tokenize(implementation, skippableSymbols:new char[1]{' '}).ToArray();
         bool IsVariable = false;
         if (tokens[1] == "=") IsVariable = true;
-        int index = 2;
+        int index = 3;
         string result = "";
-        while (tokens[index] != ")" && !IsVariable)
+        while (!IsVariable && tokens[index] != "=" )
         {
-            if (tokens[index] == ",")
+            // we want to do smth with f((x),(y)) = x + y
+            if (tokens[index] == "," || tokens[index] == "(" || tokens[index] == ")")
             {
                 index++;
                 continue;
             }
             for (int secondaryIndex = tokens.IndexOf("="); secondaryIndex < tokens.Length; secondaryIndex++)
             {
+                
                 if (tokens[secondaryIndex] == tokens[index])
                 {
-                    tokens[secondaryIndex] = arguments[(index - 2)/2].ToString();
+                    tokens[secondaryIndex] = arguments[(index - 3)/3].ToString();
                 }
             }
 
@@ -62,7 +64,7 @@ public class Function(
         {
             result += tokens[secondaryIndex];
         }
-
+        
         return result;
     }
     public static bool Comparator(Function left, Function right)
