@@ -24,6 +24,7 @@ class Program
         calculator.AddFunction(new Function("g", 1      , 4, Associativity.Left, args => calculator.CalculateFunction("g(x) = f(x,x)",args),TypeOfFunction.Function));
 
         bool running = true;
+        bool ASTCheck = false;
         while (running)
         {
             Console.WriteLine("If you want to exit write 'quit'");
@@ -31,23 +32,29 @@ class Program
             string input = Console.ReadLine();
             if (input == "quit") break;
             if (input == "functions")
-            {
+            { 
                 calculator.ShowFunctions();
                 continue;
             }
 
-            try
+            if (input == "AST")
             {
-                if (calculator.CheckFunction(input))
-                {
-                    continue;
-                }
-
-                if (calculator.CheckExpression(input)) Console.WriteLine(calculator.CalculateWithAST(input));
+                ASTCheck = true;
+                continue;
             }
-            finally
+
+            if (calculator.CheckFunction(input)) {
+                continue;
+            }
+
+            if (calculator.CheckExpression(input))
             {
-                int smrg = 0;
+                if (ASTCheck) 
+                {
+                    Console.WriteLine(calculator.CalculateWithAST(input));
+                    ASTCheck = false;
+                }
+                else Console.WriteLine(calculator.Calculate(input));
             }
             // catch (Exception exception)
             // {

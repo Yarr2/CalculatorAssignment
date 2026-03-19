@@ -30,6 +30,7 @@ public class Calculator
         }
         bool check = Checker.CheckForFunctionDefinition(expression, _functions, out Function temporaryFunction);
         if (check) AddFunction(temporaryFunction);
+        else Console.WriteLine("function not added");
         return check;
     }
 

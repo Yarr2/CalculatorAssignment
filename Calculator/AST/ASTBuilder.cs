@@ -6,7 +6,7 @@ public class ASTBuilder
     {
         OwnList<Node> nodes = GetNodes(postfix, functions);
         nodes = GetLevelsForNodes(nodes);
-        Console.WriteLine("Start nodes");nodes.ShowList();Console.WriteLine("End nodes");
+        ASTShow.Visualise(nodes.GetElement(0));
 
     }
     public static OwnList<Node> GetNodes(OwnQueue<string> postfix, OwnList<Function> functions)

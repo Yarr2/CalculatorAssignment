@@ -9,7 +9,7 @@ public class Checker
     {
         function = default(Function);
         Calculator calculator = new Calculator(functions);
-        // we want 'f ( xzdf , sfsdsy , sfsfdsdz ) = x ^ 2 + y + z'
+        // we want 'f ( ( xzdf ) , ( sfsdsy ) , ( sfsfdsdz ) ) = x ^ 2 + y + z'
         OwnList<string> symbols = functions.GetSpecificArguments(tempFunction => tempFunction.Symbol);
         OwnQueue<string> tokens = Tokenizer.Tokenize(expression,skippableSymbols:new char[1]{' '});
         string name;
@@ -25,10 +25,15 @@ public class Checker
         
         name = tokens.Pop();
         if (!name.All(char.IsLetter)) {Console.WriteLine("Invalid name for function");return false;}
-        if (symbols.Contains(name) || tokens.Size == 0)
+        if (symbols.Contains(name))
         {
-            Console.WriteLine("Not enought information or function already implemented");
+            Console.WriteLine("function already implemented");
             return false;
+        }
+
+        if (tokens.Size == 0)
+        {
+            Console.WriteLine("Not enough info for definition");
         }
         
         string value = tokens.Pop();
@@ -45,10 +50,11 @@ public class Checker
             Console.WriteLine($"After name does not come '(' but comes {value}");
             return false;
         }
-        // at this point tokens should look like - 'xzdf , sfsdsy , sfsfdsdz ) = x ^ 2 + y + z'
-        value = tokens.Pop();
+        // at this point tokens should look like - '( xzdf ) , ( sfsdsy ) , ( sfsfdsdz ) ) = x ^ 2 + y + z'
+        Console.WriteLine("Start Tokens");tokens.ShowQueue();Console.WriteLine("End tokens");
         while (value != ")")
         {
+            if (tokens.Pop() != "(") return false;
             if (!value.All(char.IsLetter))
             {
                 Console.WriteLine($"Argument = {value}");
@@ -56,6 +62,8 @@ public class Checker
                 return false;}
 
             numberOfArhuments++;
+            
+            if (tokens.Pop() != ")") return false;
             value = tokens.Pop();
             if (value == ",")
             {
@@ -76,6 +84,7 @@ public class Checker
         OwnQueue<string> tokens = Tokenizer.Tokenize(expression,skippableSymbols:new char[1]{' '});
         // expected input f ( x , ( 1 + 2 ) * 54,23 ) => correct , x => correct (x has 0 arguments)
         // f ( x ( 1 + 2 ) * 54 23 ) => ( x ( 1 + 2 ) * 54 23 )
+        tokens.ShowQueue();
         int realNumberOfArguments = 0;
         tokens.Pop();
         if (tokens.Pop() != "(") return false;
