@@ -59,15 +59,7 @@ class Program
                 }
                 else Console.WriteLine(calculator.Calculate(input));
             }
-            // catch (Exception exception)
-            // {
-            //     if ((exception.Message) == "Something") continue;
-            //     
-            // }
 
         }
     }
 }
-
-// queue - [smth smth func ( 1 2 4 ) smth smth smth] -> 
-// queue - [smth smth 1 + 2 + 4 smth smth smth]
